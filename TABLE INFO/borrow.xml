@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+xmlns:html="http://www.w3.org/TR/REC-html40">
+<Worksheet ss:Name="Table1">
+	<Table>
+		<Column ss:Index="1" ss:AutoFitWidth="0" ss:Width="110"/>
+		<Column ss:Index="2" ss:AutoFitWidth="0" ss:Width="110"/>
+		<Column ss:Index="3" ss:AutoFitWidth="0" ss:Width="110"/>
+		<Column ss:Index="4" ss:AutoFitWidth="0" ss:Width="110"/>
+		<Column ss:Index="5" ss:AutoFitWidth="0" ss:Width="110"/>
+		<Column ss:Index="6" ss:AutoFitWidth="0" ss:Width="110"/>
+		<Column ss:Index="8" ss:AutoFitWidth="0" ss:Width="110"/>
+		<Row>
+			<Cell><Data ss:Type="String">B_Id</Data></Cell>
+			<Cell><Data ss:Type="String">P_Id</Data></Cell>
+			<Cell><Data ss:Type="String">It_Id</Data></Cell>
+			<Cell><Data ss:Type="String">Copy_Id</Data></Cell>
+			<Cell><Data ss:Type="String">B_Date</Data></Cell>
+			<Cell><Data ss:Type="String">R_Date</Data></Cell>
+			<Cell><Data ss:Type="String">Renew_Times</Data></Cell>
+			<Cell><Data ss:Type="String">c_status</Data></Cell>
+		</Row>
+
+		<Row>
+			<Cell><Data ss:Type="String">b001</Data></Cell>
+			<Cell><Data ss:Type="String">p001</Data></Cell>
+			<Cell><Data ss:Type="String">h001</Data></Cell>
+			<Cell><Data ss:Type="String">c001</Data></Cell>
+			<Cell><Data ss:Type="String">2012-01-03</Data></Cell>
+			<Cell><Data ss:Type="String">2012-03-03</Data></Cell>
+			<Cell><Data ss:Type="Number">0</Data></Cell>
+			<Cell><Data ss:Type="String">good</Data></Cell>
+		</Row>
+		<Row>
+			<Cell><Data ss:Type="String">b002</Data></Cell>
+			<Cell><Data ss:Type="String">p001</Data></Cell>
+			<Cell><Data ss:Type="String">h001</Data></Cell>
+			<Cell><Data ss:Type="String">c002</Data></Cell>
+			<Cell><Data ss:Type="String">2012-01-03</Data></Cell>
+			<Cell><Data ss:Type="String">2012-03-03</Data></Cell>
+			<Cell><Data ss:Type="Number">0</Data></Cell>
+			<Cell><Data ss:Type="String">damage</Data></Cell>
+		</Row>
+		<Row>
+			<Cell><Data ss:Type="String">b003</Data></Cell>
+			<Cell><Data ss:Type="String">p003</Data></Cell>
+			<Cell><Data ss:Type="String">h003</Data></Cell>
+			<Cell><Data ss:Type="String">c004</Data></Cell>
+			<Cell><Data ss:Type="String">2012-01-23</Data></Cell>
+			<Cell><Data ss:Type="String"></Data></Cell>
+			<Cell><Data ss:Type="Number">0</Data></Cell>
+			<Cell><Data ss:Type="String">loss</Data></Cell>
+		</Row>
+		<Row>
+			<Cell><Data ss:Type="String">b004</Data></Cell>
+			<Cell><Data ss:Type="String">p001</Data></Cell>
+			<Cell><Data ss:Type="String">h003</Data></Cell>
+			<Cell><Data ss:Type="String">c002</Data></Cell>
+			<Cell><Data ss:Type="String">2018-01-03</Data></Cell>
+			<Cell><Data ss:Type="String">2018-01-31</Data></Cell>
+			<Cell><Data ss:Type="Number">0</Data></Cell>
+			<Cell><Data ss:Type="String">good</Data></Cell>
+		</Row>
+		<Row>
+			<Cell><Data ss:Type="String">b005</Data></Cell>
+			<Cell><Data ss:Type="String">p002</Data></Cell>
+			<Cell><Data ss:Type="String">h002</Data></Cell>
+			<Cell><Data ss:Type="String">c001</Data></Cell>
+			<Cell><Data ss:Type="String">2018-01-03</Data></Cell>
+			<Cell><Data ss:Type="String"></Data></Cell>
+			<Cell><Data ss:Type="Number">1</Data></Cell>
+			<Cell><Data ss:Type="String">good</Data></Cell>
+		</Row>
+		<Row>
+			<Cell><Data ss:Type="String">b006</Data></Cell>
+			<Cell><Data ss:Type="String">p003</Data></Cell>
+			<Cell><Data ss:Type="String">h003</Data></Cell>
+			<Cell><Data ss:Type="String">c001</Data></Cell>
+			<Cell><Data ss:Type="String">2018-01-03</Data></Cell>
+			<Cell><Data ss:Type="String"></Data></Cell>
+			<Cell><Data ss:Type="Number">1</Data></Cell>
+			<Cell><Data ss:Type="String">loss</Data></Cell>
+		</Row>
+		<Row>
+			<Cell><Data ss:Type="String">b007</Data></Cell>
+			<Cell><Data ss:Type="String">p001</Data></Cell>
+			<Cell><Data ss:Type="String">h002</Data></Cell>
+			<Cell><Data ss:Type="String">c003</Data></Cell>
+			<Cell><Data ss:Type="String">2018-02-03</Data></Cell>
+			<Cell><Data ss:Type="String">2018-02-10</Data></Cell>
+			<Cell><Data ss:Type="Number">0</Data></Cell>
+			<Cell><Data ss:Type="String">good</Data></Cell>
+		</Row>
+		<Row>
+			<Cell><Data ss:Type="String">b008</Data></Cell>
+			<Cell><Data ss:Type="String">p003</Data></Cell>
+			<Cell><Data ss:Type="String">h003</Data></Cell>
+			<Cell><Data ss:Type="String">c003</Data></Cell>
+			<Cell><Data ss:Type="String">2018-03-03</Data></Cell>
+			<Cell><Data ss:Type="String"></Data></Cell>
+			<Cell><Data ss:Type="Number">0</Data></Cell>
+			<Cell><Data ss:Type="String">good</Data></Cell>
+		</Row>
+		<Row>
+			<Cell><Data ss:Type="String">b009</Data></Cell>
+			<Cell><Data ss:Type="String">p002</Data></Cell>
+			<Cell><Data ss:Type="String">h002</Data></Cell>
+			<Cell><Data ss:Type="String">c002</Data></Cell>
+			<Cell><Data ss:Type="String">2018-04-03</Data></Cell>
+			<Cell><Data ss:Type="String"></Data></Cell>
+			<Cell><Data ss:Type="Number">0</Data></Cell>
+			<Cell><Data ss:Type="String">good</Data></Cell>
+		</Row>
+		<Row>
+			<Cell><Data ss:Type="String">b010</Data></Cell>
+			<Cell><Data ss:Type="String">p002</Data></Cell>
+			<Cell><Data ss:Type="String">h002</Data></Cell>
+			<Cell><Data ss:Type="String">c003</Data></Cell>
+			<Cell><Data ss:Type="String">2018-04-13</Data></Cell>
+			<Cell><Data ss:Type="String"></Data></Cell>
+			<Cell><Data ss:Type="Number">0</Data></Cell>
+			<Cell><Data ss:Type="String">good</Data></Cell>
+		</Row>	</Table>
+</Worksheet>
+</Workbook>

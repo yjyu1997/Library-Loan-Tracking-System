@@ -1,0 +1,677 @@
+/*
+ *  procdemo.pc
+ *
+ *  This program connects to ORACLE, declares and opens a cursor,
+ *  fetches the names, salaries, and commissions of all
+ *  salespeople, displays the results, then closes the cursor.
+ */
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <sqlca.h>
+#include <sqlda.h>
+#include <sqlcpr.h>
+#include <time.h>
+
+
+
+#define LEN_OF_NAME 20
+#define LEN_OF_PASS 20
+#define LEN_OF_LONG 60
+
+typedef char STRING[LEN_OF_PASS];
+typedef char LONGSTRING[LEN_OF_LONG];
+
+/*
+ * Use the precompiler typedef'ing capability to create
+ * null-terminated strings for the authentication host
+ * variables. (This isn't really necessary--plain char *'s
+ * would work as well. This is just for illustration.)
+ */
+
+
+EXEC SQL TYPE STRING IS CHARZ(LEN_OF_PASS) REFERENCE;
+STRING     username;
+STRING     password;
+
+/* Declare a host structure tag. */
+typedef struct{
+    STRING it_id;
+    int num;
+ } type1 ;
+
+typedef struct{
+    STRING p_id;
+    STRING p_fname;
+    STRING p_lname;
+    LONGSTRING address;
+    STRING tel;
+    STRING b_id;
+    int over;
+} type2 ;
+
+typedef struct{
+    STRING p_id;
+    float fine;
+    float payment;
+    float balance;
+} type3 ;
+
+typedef struct{
+    STRING p_id;
+    STRING t_id;
+    STRING f_id;
+    STRING overdue;
+    STRING f_type;
+    float amount;
+    STRING p_date;
+} type4 ;
+
+typedef struct{
+    STRING it_id;
+    STRING copy_id;
+    int renew_times;
+    int over;
+} type5 ;
+
+typedef struct{
+    STRING r_id;
+    STRING p_id;
+    STRING it_id;
+    int rq_amount;
+    STRING rq_date;
+
+} type6 ;
+
+typedef struct{
+    float famount;
+    
+
+} type7 ;
+
+typedef struct{
+    float pamount;
+    
+    
+} type7p ;
+
+typedef struct{
+    STRING it_cat;
+    int period;
+    int renewal;
+} type8 ;
+
+typedef struct{
+    STRING p_id;
+    STRING it_id;
+    LONGSTRING it_name;
+    STRING author;
+    STRING it_type;
+    STRING it_cat;
+    int checkedout;
+} type9 ;
+
+typedef struct{
+    STRING r_id;
+    STRING p_id;
+    STRING it_id;
+    int rq_amount;
+    STRING rq_date;
+} type10 ;
+
+void sql_error(msg)
+char *msg;
+{
+    
+    char err_msg[128];
+    size_t buf_len, msg_len;
+    EXEC SQL WHENEVER SQLERROR CONTINUE;
+    
+    printf("\n%s\n", msg);
+    buf_len = sizeof (err_msg);
+    sqlglm(err_msg, &buf_len, &msg_len);
+    printf("%.*s\n", msg_len, err_msg);
+    
+    EXEC SQL ROLLBACK WORK RELEASE;
+    exit(EXIT_FAILURE);
+}
+/* **** Insert a new pending request made by a patron. ***** */
+void query10(){
+    
+    type10 newreq;
+    
+    
+    printf("\n\tEnter Request ID: ");
+    scanf ("%s",newreq.r_id); getchar();
+    printf("\n\tEnter Patron ID: ");
+    scanf ("%s",newreq.p_id); getchar();
+    printf("\n\tEnter Item ID: ");
+    scanf ("%s",newreq.it_id); getchar();
+    printf("\n\tEnter Request Amount: ");
+    scanf ("%d",&newreq.rq_amount); getchar();
+    printf("\n\tEnter Request DATE: ");
+    scanf ("%s",newreq.rq_date); getchar();
+    EXEC SQL WHENEVER SQLERROR DO sql_error("insert error.");
+    
+    EXEC SQL set transaction read write;
+    EXEC SQL insert into request (r_id, p_id, it_id, rq_amount, rq_date)
+    values(:newreq.r_id ,:newreq.p_id, :newreq.it_id,:newreq.rq_amount,:newreq.rq_date);
+    
+    EXEC SQL commit;
+    
+    
+    
+    
+    
+    printf("\nNew Request %s Added.\n");
+    
+};
+/* **** list number of copies of a particular library item.***** */
+void query1(){
+    
+    type1 newq1;
+    char word[55];
+    
+    printf("\n\tEnter item ID: ");
+    scanf ("%s",&word); getchar();
+    
+    /* Declare a cursor for the FETCH. */
+    EXEC SQL DECLARE c1 CURSOR FOR
+    select * from copynum
+    where it_id = :word;
+    EXEC SQL OPEN c1;
+    
+    
+    printf("\nnumber of copies of item: %s\n\n", word);
+    printf("itemId          Number\n");
+    printf("******          ******\n");
+    
+    
+    
+    EXEC SQL WHENEVER NOT FOUND DO break;
+    for (;;)
+    {
+        EXEC SQL FETCH c1 INTO :newq1;
+        
+        /* Print info */
+        printf("%s %d\n",newq1.it_id, newq1.num );
+    }
+    printf("\n");
+    EXEC SQL CLOSE c1;
+    
+};
+
+/* **** list the details of the patrons who have at least an overdue library item today. ***** */
+void query2(){
+    type2 newq2;
+    /* Declare a cursor for the FETCH. */
+    EXEC SQL DECLARE c2 CURSOR FOR
+    select * from q2
+    order by p_id;
+    EXEC SQL OPEN c2;
+    
+    
+    printf("\nthe patrons who have at least an overdue library item today\n\n");
+    printf("PatronId           First Name          Last Name             Address                                                       Tel              b_id               over\n");
+    printf("********           **********          *********             *******                                                       ***              ****               ****\n");
+    
+    
+    
+    EXEC SQL WHENEVER NOT FOUND DO break;
+    for (;;)
+    {
+        EXEC SQL FETCH c2 INTO :newq2;
+        
+        /* Print info */
+        printf("%s %s %s %s %s %s %d\n", newq2.p_id,newq2.p_fname,newq2.p_lname,newq2.address,newq2.tel,newq2.b_id,newq2.over );
+    }
+    printf("\n");
+    EXEC SQL CLOSE c2;
+};
+
+/* ****THE TOTAL FINE OWED BY A PATRON  ***** */
+void query3(){
+    
+    type3 newq3;
+    char word[55];
+    
+    printf("\n\tEnter Patron ID: ");
+    scanf ("%s",&word); getchar();
+    
+    /* Declare a cursor for the FETCH. */
+    EXEC SQL DECLARE c3 CURSOR FOR
+    select * from patronfine
+    where p_id = :word ;
+    EXEC SQL OPEN c3;
+    
+    
+    printf("\nTotal Fine owed by Patron: %s\n\n", word);
+    printf("PatronId                  Fine         Payment        Balance\n");
+    printf("******                    ****         *******        *******\n");
+    
+    
+    
+    EXEC SQL WHENEVER NOT FOUND DO break;
+    for (;;)
+    {
+        EXEC SQL FETCH c3 INTO :newq3;
+        
+        /* Print info */
+        printf("%s    %9.2f    %9.2f      %9.2f\n",newq3.p_id, newq3.fine, newq3.payment, newq3.balance );
+    }
+    printf("\n");
+    EXEC SQL CLOSE c3;
+    
+    
+};
+
+
+
+/* **** details (e.g., damage, loss, amount, etc.) of the payment made by a patron. ***** */
+void query4(){
+    
+    type4 newq4;
+    char word[55];
+    
+    printf("\n\tEnter Patron ID: ");
+    scanf ("%s",&word); getchar();
+    
+    /* Declare a cursor for the FETCH. */
+    EXEC SQL DECLARE c4 CURSOR FOR
+    select p_id, t_id, f_id, overdue, f_type,p_amount, p_date from payment_detail
+    where p_id = :word
+    order by t_id;
+    EXEC SQL OPEN c4;
+    
+    
+    printf("\nDetails of the payment made by Patron: %s\n\n", word);
+    printf("PatronId                t_id                  f_id                   Overdue                f_type                  Amount    Date\n");
+    printf("******                  ****                  ****                   *******                ******                  ******    ****\n");
+    
+    
+    
+    EXEC SQL WHENEVER NOT FOUND DO break;
+    for (;;)
+    {
+        EXEC SQL FETCH c4 INTO :newq4;
+        
+        /* Print info */
+        printf("%s    %s    %s    %s    %s  %9.2f  %s\n",newq4.p_id, newq4.t_id, newq4.f_id, newq4.overdue, newq4.f_type, newq4.amount,newq4.p_date );
+    }
+    printf("\n");
+    EXEC SQL CLOSE c4;
+    
+};
+/* **** the copies of library items that are grossly overdue. ***** */
+void query5(){
+    type5 newq5;
+    int days;
+    
+    printf("\n\tDefine grossly overdue days: ");
+    scanf ("%d",&days); getchar();
+    
+    /* Declare a cursor for the FETCH. */
+    EXEC SQL DECLARE c5 CURSOR FOR
+    select it_id,copy_id,renew_times,over
+    from overdue
+    where over >= :days
+    order by it_id;
+    EXEC SQL OPEN c5;
+    
+    
+    printf("\nthe copies of library items that are grossly overdue:\n\n");
+    printf("ItemId                 COPY_id          RENEWTIMES   OVER\n");
+    printf("******                 *******          **********   ****\n");
+    
+    
+    
+    EXEC SQL WHENEVER NOT FOUND DO break;
+    for (;;)
+    {
+        EXEC SQL FETCH c5 INTO :newq5;
+        
+        /* Print info */
+        printf("%s    %s    %d      %d\n",newq5.it_id, newq5.copy_id, newq5.renew_times, newq5.over );
+    }
+    printf("\n");
+    EXEC SQL CLOSE c5;
+               
+               };
+               
+        /* **** List the details of the current pending requests in the system.***** */
+               void query6(){
+                   type6 newq6;
+                   
+                   /* Declare a cursor for the FETCH. */
+                   EXEC SQL DECLARE c6 CURSOR FOR
+                   select * from request
+                   where rq_date >= sysdate
+                   order by r_id;
+                   EXEC SQL OPEN c6;
+                    printf("\nthe details of the current pending requests in the system: \n\n");
+    printf("RequestId        Patron_id                 ITEMID                 AMOUNT       DATE\n");
+    printf("*********        *********                 ******                 ******       ****\n");
+                   /* Array fetch loop - ends when NOT FOUND becomes true. */
+                   EXEC SQL WHENEVER NOT FOUND DO break;
+                   
+                   
+                   for (;;)
+                   {
+                       EXEC SQL FETCH c6 INTO :newq6;
+                       
+                       /* Print info */
+                       printf("%s   %s    %s    %d      %s\n",newq6.r_id, newq6.p_id,newq6.it_id,newq6.rq_amount,newq6.rq_date );
+                   }
+                   printf("\n");
+                   EXEC SQL CLOSE c6;
+               };
+               
+        /* **** Identify the total ne revenue to the library during a period ***** */
+               void query7(){
+                   type7 newq7;
+                   type7p newq7p;
+                   char begindate[50];
+                   char enddate[50];
+                   printf("\n\tEnter Begin Date (format:DD-MONTH-YY): ");
+                   scanf ("%s",&begindate); getchar();
+                   printf("\n\tEnter End Date: ");
+                   scanf ("%s",&enddate); getchar();
+                  
+                   
+                   /* Declare a cursor for the FETCH. */
+                   EXEC SQL DECLARE c7 CURSOR FOR
+                   select sum(f.amount) as Fine  from fine f
+                   where f.issue_date between :begindate and :enddate
+                   ;
+                   
+                 
+                   EXEC SQL OPEN c7;
+                   
+                   
+                   printf("\nTotal Fine Amount: \n\n");
+            
+                   
+                   
+                   
+                   EXEC SQL WHENEVER NOT FOUND DO break;
+                   for (;;)
+                   {
+                       EXEC SQL FETCH c7 INTO :newq7;
+                       
+                       /* Print info */
+                       printf("%9.2f" , newq7.famount);
+                   }
+                   printf("\n");
+                   EXEC SQL CLOSE c7;
+                   
+                   
+                   EXEC SQL DECLARE c7p CURSOR FOR
+                   select sum(p_amount) as Payment  from payment
+                   where p_date between:begindate and :enddate
+                   ;
+                   EXEC SQL OPEN c7p;
+                   
+                   
+                   printf("\nTotal Payment Amount: \n\n");
+                   
+                   
+                   
+                   
+                   EXEC SQL WHENEVER NOT FOUND DO break;
+                   for (;;)
+                   {
+                       EXEC SQL FETCH c7p INTO :newq7p;
+                       
+                       /* Print info */
+                       printf("%9.2f" , newq7p.pamount);
+                   }
+                   printf("\n");
+                   EXEC SQL CLOSE c7p;
+                   
+                              };
+                              
+                /* **** List the details of the checkout periods and the numbers of renewals for all the categories of items***** */
+                        void query8(){
+                            type8 newq8;
+                            
+                            
+                    
+                            
+                            /* Declare a cursor for the FETCH. */
+                            EXEC SQL DECLARE c8 CURSOR FOR
+                            select * from cat;
+                            EXEC SQL OPEN c8;
+                            
+                            
+      printf("\nDetails of Categories :\n\n");
+      printf("Category            Period   Renewal\n");
+      printf("********            ******   *******\n");
+                            
+                            
+                            
+                            EXEC SQL WHENEVER NOT FOUND DO break;
+                            for (;;)
+                            {
+                                EXEC SQL FETCH c8 INTO :newq8;
+                                
+                                /* Print info */
+                                printf("%s    %d    %d\n",newq8.it_cat,newq8.period,newq8.renewal);
+                            }
+                            printf("\n");
+                            EXEC SQL CLOSE c8;
+                              };
+                              
+/* **** List the total number and the details of library items that are checked out and renewed by a patron.
+ ***** */
+                              void query9(){
+                                  type9 newq9;
+                                  char word[55];
+                                  printf("\n\tEnter Patron ID: ");
+                                  scanf ("%s",&word); getchar();
+                            
+                                  
+                                  /* Declare a cursor for the FETCH. */
+                                  EXEC SQL DECLARE c9 CURSOR FOR
+                                  select * from q9
+                                  where p_id = :word
+                                  order by it_id
+                                  ;
+                                  EXEC SQL OPEN c9;
+                                  
+                                  
+printf("\nthe total number and the details of library items that are checked out and renewed by a patron:\n\n");
+printf("PatronID           ItemId                ItemName                                                      Author            Itemtype           Category          Number \n");
+printf("********           ******                ********                                                      ******            ********           ********          ******\n");
+                                  
+                                  
+                                  
+                                  EXEC SQL WHENEVER NOT FOUND DO break;
+                                  for (;;)
+                                  {
+                                      EXEC SQL FETCH c9 INTO :newq9;
+                                      
+                                      /* Print info */
+printf("%s %s %s %s %s %s %d\n",newq9.p_id,newq9.it_id, newq9.it_name, newq9.author, newq9.it_type, newq9.it_cat, newq9.checkedout);
+                                  }
+                                  printf("\n");
+                                  EXEC SQL CLOSE c9;
+                                                    
+                                                    
+                                                    
+                                                    };
+
+
+                                                                              
+                                                   
+                                                                              
+                                                   
+                                                                              
+                                                
+                                                                              
+                                                                              void main()
+                                                            {
+                                                   
+                                                                
+                                                                /* Connect to ORACLE. */
+                                                                strcpy(username, "heyaece567");
+                                                                strcpy(password, "jy5867215");
+                                                                
+                                                                EXEC SQL WHENEVER SQLERROR DO sql_error("Connect error:");
+                                                                
+                                                                EXEC SQL CONNECT :username IDENTIFIED BY :password;
+                                                                printf("\nConnected to ORACLE as user: %s\n", username);
+                                                                
+                                                                
+                                                                EXEC SQL WHENEVER SQLERROR DO sql_error("Oracle error:");
+                                                                
+                                                                
+                                                                int total_queried = 0;
+                                                                char str1[15];
+                                                                while (total_queried != -1) {
+                                                                    
+                                                                    
+                                                                    int emp_number = 0;
+                                                                    printf("\n Please enter the index number of query: \n");
+                                                                    printf("1: List the number of copies of a particular library item;\n");
+                                                                    printf("2: List the details of the patrons who have at least an overdue library item today;\n");
+                                                                    printf("3: Identify the total ﬁne owed by a patron (by his/her library card number) currently in the system;\n");
+                                                                    printf("4: List the details (e.g., damage, loss, amount, etc.) of the payment made by a patron;\n");
+                                                                    printf("5: List the copies of library items that are grossly overdue;\n");
+                                                                    printf("6: List the details of the current pending requests in the system.;\n");
+                                                                    printf("7: Identify the total ﬁne revenue to the library during a period.;\n");
+                                                                    printf("8: List the details of the checkout periods and the numbers of renewals for all the categories of library items;\n");
+                                                                    printf("9: List the total number and the details of library items that are checked out and renewed by a patron.;\n");
+                                                                    printf("10: Insert a new pending request made by a patron.\n");
+                                                                    printf("0: Exit. \n");
+                                                                    gets(str1);
+                                                                    emp_number = atoi(str1);
+                                                                    switch (emp_number)
+                                                                    {
+                                                                        case 0 :{
+                                                                            printf("\nTHANKS FOR YOUR TESTING. \n");
+                                                                            ;
+                                                                            total_queried = -1;
+                                                                        }
+                                                                            break;
+                                                                        case 1:{
+                                                                            query1();
+                                                                            
+                                                                        }
+                                                                            break;
+                                                                            
+                                                                        case 2:{
+                                                                            query2();
+                                                                            
+                                                                            
+                                                                            
+                                                                        }
+                                                                            break;
+                                                                            
+                                                                        case 3:{
+                                                                            
+                                                                            query3();
+                                                                            
+                                                                        }
+                                                                            break;
+                                                                            
+                                                                        case 4:{
+                                                                            query4();
+                                                                            
+                                                                        }
+                                                                            break;
+                                                                            
+                                                                        case 5:{
+                                                                            
+                                                                            query5();
+                                                                        }
+                                                                            break;
+                                                                        case 6:{
+                                                                            
+                                                                            query6();
+                                                                        }
+                                                                            break;
+                                                                        case 7:{
+                                                                            
+                                                                            query7();
+                                                                        }
+                                                                            break;
+                                                                        case 8:{
+                                                                            
+                                                                            query8();
+                                                                        }
+                                                                            break;
+                                                                        case 9:{
+                                                                            
+                                                                            query9();
+                                                                        }
+                                                                            break;
+                                                                        case 10:{
+                                                                            
+                                                                            query10();
+                                                                        }
+                                                                            break;
+                                                                    }
+                                                                    
+                                                                }
+                                                                
+                                                                /* Declare the cursor. All static SQL explicit cursors
+                                                                 * contain SELECT commands. 'salespeople' is a SQL identifier,
+                                                                 * not a (C) host variable.
+                                                                 */
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                /* Open the cursor. */
+                                                                //EXEC SQL OPEN HotelinMiami;
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                /* Get ready to print results. */
+                                                                //printf("\n\nThe Hotels in Miami--\n\n");
+                                                                
+                                                                
+                                                                /* Loop, fetching all salesperson's statistics.
+                                                                 * Cause the program to break the loop when no more
+                                                                 * data can be retrieved on the cursor.
+                                                                 */
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                /* Get ready to print results. */
+                                                                
+                                                                /* Loop, fetching all salesperson's statistics.
+                                                                 * Cause the program to break the loop when no more
+                                                                 * data can be retrieved on the cursor.
+                                                                 */
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                /* Close the cursor. */
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                printf("\nGOOD-BYE!!\n\n");
+                                                                
+                                                                EXEC SQL COMMIT WORK RELEASE;
+                                                                exit(EXIT_SUCCESS);
+                                                            }
+

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+xmlns:html="http://www.w3.org/TR/REC-html40">
+<Worksheet ss:Name="Table1">
+	<Table>
+		<Column ss:Index="1" ss:AutoFitWidth="0" ss:Width="110"/>
+		<Column ss:Index="2" ss:AutoFitWidth="0" ss:Width="110"/>
+		<Column ss:Index="3" ss:AutoFitWidth="0" ss:Width="110"/>
+		<Column ss:Index="4" ss:AutoFitWidth="0" ss:Width="110"/>
+		<Column ss:Index="5" ss:AutoFitWidth="0" ss:Width="110"/>
+		<Column ss:Index="7" ss:AutoFitWidth="0" ss:Width="110"/>
+		<Row>
+			<Cell><Data ss:Type="String">F_Id</Data></Cell>
+			<Cell><Data ss:Type="String">B_Id</Data></Cell>
+			<Cell><Data ss:Type="String">Issue_Date</Data></Cell>
+			<Cell><Data ss:Type="String">Overdue</Data></Cell>
+			<Cell><Data ss:Type="String">F_type</Data></Cell>
+			<Cell><Data ss:Type="String">Amount</Data></Cell>
+			<Cell><Data ss:Type="String">notes</Data></Cell>
+		</Row>
+
+		<Row>
+			<Cell><Data ss:Type="String">f001</Data></Cell>
+			<Cell><Data ss:Type="String">b001</Data></Cell>
+			<Cell><Data ss:Type="String">2012-03-03</Data></Cell>
+			<Cell><Data ss:Type="String">YES</Data></Cell>
+			<Cell><Data ss:Type="String"></Data></Cell>
+			<Cell><Data ss:Type="Number">30.00</Data></Cell>
+			<Cell><Data ss:Type="String"></Data></Cell>
+		</Row>
+		<Row>
+			<Cell><Data ss:Type="String">f002</Data></Cell>
+			<Cell><Data ss:Type="String">b002</Data></Cell>
+			<Cell><Data ss:Type="String">2012-03-03</Data></Cell>
+			<Cell><Data ss:Type="String">YES</Data></Cell>
+			<Cell><Data ss:Type="String">damage</Data></Cell>
+			<Cell><Data ss:Type="Number">150.00</Data></Cell>
+			<Cell><Data ss:Type="String"> overdued several days:30,found item cover damaged:120</Data></Cell>
+		</Row>
+		<Row>
+			<Cell><Data ss:Type="String">f003</Data></Cell>
+			<Cell><Data ss:Type="String">b003</Data></Cell>
+			<Cell><Data ss:Type="String">2012-03-21</Data></Cell>
+			<Cell><Data ss:Type="String">YES</Data></Cell>
+			<Cell><Data ss:Type="String">loss</Data></Cell>
+			<Cell><Data ss:Type="Number">223.89</Data></Cell>
+			<Cell><Data ss:Type="String">late report:23.89, item loss: 200</Data></Cell>
+		</Row>
+		<Row>
+			<Cell><Data ss:Type="String">f004</Data></Cell>
+			<Cell><Data ss:Type="String">b006</Data></Cell>
+			<Cell><Data ss:Type="String">2018-04-06</Data></Cell>
+			<Cell><Data ss:Type="String">NO</Data></Cell>
+			<Cell><Data ss:Type="String">loss</Data></Cell>
+			<Cell><Data ss:Type="Number">178.99</Data></Cell>
+			<Cell><Data ss:Type="String"></Data></Cell>
+		</Row>	</Table>
+</Worksheet>
+</Workbook>
